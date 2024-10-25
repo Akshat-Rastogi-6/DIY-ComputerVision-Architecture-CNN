@@ -28,6 +28,12 @@ import os
 import torch
 from train import BirdClassificationCNN
 from ingest_transform import preprocess
+import streamlit as st
+from PIL import Image
+import os
+import numpy as np
+import tensorflow as tf  # For Keras model
+from keras.preprocessing.image import img_to_array, load_img
 
 def predict_image_class(model, img_tensor, class_labels):
     with torch.no_grad():
@@ -36,47 +42,43 @@ def predict_image_class(model, img_tensor, class_labels):
         predicted_class = class_labels[predicted.item()]
         return predicted_class
 
-# def classify(image):
-#     image_tensor = preprocess(image).unsqueeze(0)  # Add batch dimension
-#     with torch.no_grad():
-#         model = BirdClassificationCNN(num_classes=25)
-#         model.load_state_dict(torch.load('code/saved_model/bird_classification_cnn.pth'))
-#         model.eval()
-#         output = model(image_tensor)
-#         _, predicted_idx = torch.max(output, 1)
-    
-#     data_dir = "extracted_images"
-#     # Map predicted index to class name (you need to define this mapping)
-#     class_names = [name for name in os.listdir(data_dir) if os.path.isdir(os.path.join(data_dir, name))]
-#     print(class_names)
-    
-#     predicted_class = class_names[predicted_idx.item()]
-#     return predicted_class
-
 def classify(image):
-    # Initialize the model first
-    model = BirdClassificationCNN(num_classes=25)  
-    # Load the model's state dictionary
-    model.load_state_dict(torch.load('code/saved_model/bird_classification_cnn.pth'))
-    model.eval()  # Set the model to evaluation mode
+    image_tensor = preprocess(image).unsqueeze(0)  # Add batch dimension
+    with torch.no_grad():
+        model = BirdClassificationCNN(num_classes=25)
+        model.load_state_dict(torch.load('code/saved_model/bird_classification_cnn.pth'))
+        model.eval()
+        output = model(image_tensor)
+        _, predicted_idx = torch.max(output, 1)
     
-    # Preprocess the image
-    image_tensor = preprocess(image)  # No need for unsqueeze here, preprocess should return the right shape
-    
-    # Check shape for debugging
-    print(f'Image tensor shape: {image_tensor.shape}')  # This should be [3, 150, 150]
-    
-    # Add batch dimension
-    image_tensor = image_tensor.unsqueeze(0)  # Now shape should be [1, 3, 150, 150]
-
-    with torch.no_grad():  # Disable gradient tracking for inference
-        output = model(image_tensor)  # Forward pass
-        _, predicted_idx = torch.max(output, 1)  # Get the index of the max log-probability
-    
-    data_dir = "extracted_images\Master"
+    data_dir = "data\Master"
     # Map predicted index to class name (you need to define this mapping)
     class_names = [name for name in os.listdir(data_dir) if os.path.isdir(os.path.join(data_dir, name))]
-
-    # Get the predicted class name
-    predicted_class = class_names[predicted_idx.item()]  # Assuming class_names is defined
+    print(class_names)
+    
+    predicted_class = class_names[predicted_idx.item()]
     return predicted_class
+
+
+# def classify(image_path):
+#     # Load the model from the .h5 file
+#     model = tf.keras.models.load_model('code/saved_model/bird_classification_cnn.h5')
+    
+#     # Load and preprocess the image
+#     image = load_img(image_path, target_size=(150, 150))  # Resize to match the model's expected input
+#     image_tensor = img_to_array(image)  # Convert to numpy array
+#     image_tensor = np.expand_dims(image_tensor, axis=0)  # Add batch dimension
+
+#     # Normalize the image if required (adjust based on your training preprocessing)
+#     image_tensor /= 255.0  # Assuming the model was trained on images normalized to [0, 1]
+    
+#     # Make predictions
+#     predictions = model.predict(image_tensor)
+#     predicted_idx = np.argmax(predictions, axis=1)
+
+#     # Map predicted index to class name
+#     data_dir = r"data\Master"  # Update path to your class folder
+#     class_names = [name for name in os.listdir(data_dir) if os.path.isdir(os.path.join(data_dir, name))]
+
+#     predicted_class = class_names[predicted_idx[0]]  # Get the predicted class name
+#     return predicted_class

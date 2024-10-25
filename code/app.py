@@ -40,32 +40,28 @@ st.divider()
 
 tab1, tab2, tab3, tab4 = st.tabs(["Model Config", "Model Training", "Model Evaluation", "Model Prediction"])
 
+# import os
+# import streamlit as st
+
+# Define the default path
+default_path = "data/Master"
+
 with tab1:
-    uploaded_file = st.file_uploader("Upload a ZIP file containing images in subfolders (JPEG/JPG format)", type="zip")
-
-    if uploaded_file is not None:
-        # Define the directory to extract to
-        extraction_dir = "extracted_images"
-
-        # Create the directory if it doesn't exist
-        os.makedirs(extraction_dir, exist_ok=True)
-
-        # Create a ZipFile object from the uploaded file
-        with zipfile.ZipFile(uploaded_file, 'r') as zip_ref:
-            # Extract all contents to the specified directory
-            zip_ref.extractall(extraction_dir)
-            
-            # Get the list of all files in the zip
-            file_list = zip_ref.namelist()
-            
-            # Count the number of image files
-            image_count = sum(1 for file_name in file_list if file_name.endswith(('.jpeg', '.jpg')))
+    # Input field to take the directory path
+    data_path = st.text_input("Enter the path to the folder containing images", value=default_path)
+    extraction_dir = data_path
+    if os.path.exists(data_path):
+        # List all files in the directory and subdirectories
+        file_list = [os.path.join(dp, f) for dp, dn, filenames in os.walk(data_path) for f in filenames]
+        
+        # Count the number of image files
+        image_count = sum(1 for file_name in file_list if file_name.lower().endswith(('.jpeg', '.jpg')))
         
         # Display the total number of images found
         st.write(f"Number of images found: {image_count}")
-        st.write(f"Images have been extracted to: {extraction_dir}")
+        st.write(f"Images found in: {data_path}")
     else:
-        st.write("No ZIP file uploaded yet.")
+        st.write("The specified path does not exist. Please enter a valid path.")
 
 
 with tab2:
@@ -91,36 +87,54 @@ with tab2:
 
     st.divider()
 
+import tensorflow as tf
+with tab3:
+    st.subheader("Model Evaluation")
+    st.write("This is where you can see the current metrics of the latest saved model.")
+    st.divider()
+    st.markdown(f"<h3 style='text-align: center; color: white;'> Classification Report </h3>", unsafe_allow_html=True)
+    import traceback
+    try:
+        # Loading model
+        model_path = r"code\saved_model\bird_classification_cnn.h5"
+        st.write(f"Loading model from {model_path}")  # Debug: Print the model path
+        model = tf.keras.models.load_model(model_path)
+        st.write("Model loaded successfully!")  # Debug: Confirm the model is loaded
 
-    with tab3:
-        st.subheader("Model Evaluation")
-        st.write("This is where you can see the current metrics of the latest saved model.")
+        # Load the validation data
+        st.write("Loading validation data...")  # Debug: Add message before loading data
+        train_loader, val_loader = data_load(extraction_dir)
+        st.write(f"Validation data loaded. Total batches: {len(val_loader)}")  # Debug: Confirm data loaded
+
+        # Validate the model
+        st.write("Validating model...")  # Debug: Add message before validation
+        cf = validate_model(model, val_loader)
+        st.text(cf)
+
         st.divider()
-        st.markdown(f"<h3 style='text-align: center; color: white;'> Classification Report </h3>", unsafe_allow_html=True)
+    except Exception as e:
+        st.error(f"An error occurred: {str(e)}")  # Basic error message
+        # Print full traceback for detailed debugging
+        st.error(traceback.format_exc())
+
+
+with tab4:
+    # Image path input instead of file uploader
+    image_path = st.text_input("Enter the path of the image", value="data/Master/Common-Tailorbird/Common-Tailorbird_103.jpg")
+
+    if image_path:
         try:
-            cf = validate_model(model, val_loader)
-            st.text(cf)
-            st.divider()
+            # Open and display the image
+            image = Image.open(image_path)
+            # Display the predicted class
+            predicted_class = classify(image_path)
+            st.write(f"Predicted Class: {predicted_class}")
+            # Show the image with an improved caption
+            st.image(image, caption="Uploaded Image", use_column_width=True)
         except Exception as e:
-            st.error("Please upload a zip file.")
-
-    with tab4:
-    # Image uploader with improved title and description
-        uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
-
-        if uploaded_file is not None:
-            # try:
-                # Open and display the uploaded image
-                image = Image.open(uploaded_file)
-                # Display the predicted class
-                predicted_class = classify(uploaded_file)
-                st.write(predicted_class)
-                # Show the image with an improved caption
-                st.image(image, caption="Uploaded Image", use_column_width=True)
-            # except Exception as e:
-            #     st.error(f"Error processing the image: {e}")
-        else:
-            st.write("No image uploaded yet. Please upload an image to classify.")
+            st.error(f"Error processing the image: {e}")
+    else:
+        st.write("No image path provided. Please enter the path of an image to classify.")
 
 
 
