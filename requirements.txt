@@ -1,0 +1,12 @@
+torch                   # For PyTorch-based model building and training
+torchvision             # For image transformations and pretrained models
+pillow                  # For image handling and manipulation
+psycopg2                # For PostgreSQL database connectivity
+streamlit               # For building web interfaces and displaying model information
+couchdb                 # For CouchDB database connectivity
+numpy                   # General-purpose array manipulation
+pandas                  # Data analysis and handling
+os
+PIL
+matplotlib
+
