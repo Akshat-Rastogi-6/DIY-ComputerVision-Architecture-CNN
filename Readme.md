@@ -74,7 +74,7 @@ The dataset contains features related to various bird species, including:
 - **Testing Samples:** Approximately 2,000 images for evaluation purposes.
 ---
 
-##What is a Convolutional Neural Network (CNN)?
+## What is a Convolutional Neural Network (CNN)?
 
 A Convolutional Neural Network (CNN) is a type of deep learning algorithm primarily used for image recognition and classification tasks. CNNs are designed to automatically and adaptively learn spatial hierarchies of features from input images.
 
