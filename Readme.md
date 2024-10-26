@@ -80,9 +80,9 @@ A Convolutional Neural Network (CNN) is a type of deep learning algorithm primar
 
 CNNs consist of several layers:
 
-Convolutional Layers: Apply filters (kernels) to the input image to extract features like edges, textures, etc.
-Pooling Layers: Reduce the spatial dimensions (width, height) of the input to make computation more efficient.
-Fully Connected Layers: Connect all neurons from the previous layer to every neuron in the next layer, similar to traditional neural networks.
+- Convolutional Layers: Apply filters (kernels) to the input image to extract features like edges, textures, etc.
+- Pooling Layers: Reduce the spatial dimensions (width, height) of the input to make computation more efficient.
+- Fully Connected Layers: Connect all neurons from the previous layer to every neuron in the next layer, similar to traditional neural networks.
 
 ## Program Flow
 
