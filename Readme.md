@@ -58,6 +58,7 @@ code/
 readme.md                           (documentation for the project)
 requirements.txt                   (lists the dependencies required for the project)
 
+```
 
 ## Data Definition
 
@@ -71,7 +72,6 @@ The dataset contains features related to various bird species, including:
 **Training and Testing Data:**
 - **Training Samples:** Approximately 10,000 images across various bird species.
 - **Testing Samples:** Approximately 2,000 images for evaluation purposes.
-```
 ---
 
 ##What is a Convolutional Neural Network (CNN)?
