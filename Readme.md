@@ -84,9 +84,6 @@ Convolutional Layers: Apply filters (kernels) to the input image to extract feat
 Pooling Layers: Reduce the spatial dimensions (width, height) of the input to make computation more efficient.
 Fully Connected Layers: Connect all neurons from the previous layer to every neuron in the next layer, similar to traditional neural networks.
 
-![CNN](.code\images\flow.jpg)
-
-
 ## Program Flow
 
 1. **Data Ingestion:** Load bird images and their corresponding metadata from the `Data` directory (e.g., image files and CSV containing species information) and ingest it into a suitable format for processing. [`ingest_transform.py`]
