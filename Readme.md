@@ -74,6 +74,19 @@ The dataset contains features related to various bird species, including:
 ```
 ---
 
+##What is a Convolutional Neural Network (CNN)?
+
+A Convolutional Neural Network (CNN) is a type of deep learning algorithm primarily used for image recognition and classification tasks. CNNs are designed to automatically and adaptively learn spatial hierarchies of features from input images.
+
+CNNs consist of several layers:
+
+Convolutional Layers: Apply filters (kernels) to the input image to extract features like edges, textures, etc.
+Pooling Layers: Reduce the spatial dimensions (width, height) of the input to make computation more efficient.
+Fully Connected Layers: Connect all neurons from the previous layer to every neuron in the next layer, similar to traditional neural networks.
+
+![CNN](.code\images\flow.jpg)
+
+
 ## Program Flow
 
 1. **Data Ingestion:** Load bird images and their corresponding metadata from the `Data` directory (e.g., image files and CSV containing species information) and ingest it into a suitable format for processing. [`ingest_transform.py`]

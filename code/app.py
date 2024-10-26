@@ -220,6 +220,8 @@ with tab4:
 
 # Fifth tab: Image Preprocessing
 with tab5:
+    preprces = r"code\images\flow.jpg"
+    st.image(preprces, caption="Pre-processing Steps", use_column_width=True)
     # File uploader for the user to upload an image file
     uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"], key="second")
     
