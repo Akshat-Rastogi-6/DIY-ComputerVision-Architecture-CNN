@@ -320,13 +320,3 @@ with tab6:
 
     st.markdown("---")
 
-    # Further reading resources
-    st.subheader("Further Reading")
-    st.markdown(""" 
-    If you are interested in learning more about CNNs or machine learning in general, here are a few useful resources:
-
-    - [Deep Learning with Python by François Chollet](https://www.manning.com/books/deep-learning-with-python)
-    - [Stanford University's CS231n: Convolutional Neural Networks for Visual Recognition](http://cs231n.stanford.edu/)
-    - [Machine Learning on Coursera](https://www.coursera.org/learn/machine-learning)
-    """)
-
